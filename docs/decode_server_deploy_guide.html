@@ -1,0 +1,413 @@
+<!DOCTYPE html><html><head>
+      <title>decode_server_deploy_guide</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+      <style> 
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
+
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
+}
+
+.token.comment,
+.token.blockquote {
+  color: #969896;
+}
+
+.token.cdata {
+  color: #183691;
+}
+
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
+}
+
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
+}
+
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
+}
+
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
+
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+ 
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview   ">
+      <h2 class="mume-header" id="decode-server-deploy-guide">Decode Server Deploy Guide</h2>
+
+<p>Assume that we start from a fresh installation of Ubuntu 16.04 LTS server edition.</p>
+<p><strong>Notes:</strong></p>
+<ol>
+<li>Please use <code>itso</code> as your username. If not, you need to change many other configurations.</li>
+<li>There is a timeout setting in the <code>ExecStart</code> section of <code>~/decode_website/deployment_configs/gunicorn.service</code>. It must be large enough to handle large upload files.</li>
+<li>Always start a <code>screen</code> / <code>tmux</code> session immediately after you sshed into the system to avoid problems caused by network failures.</li>
+<li>Never interrupt an <code>apt</code> or <code>apt-get</code> session when it is installing, upgrading, or removing packages.</li>
+<li>If you see that <code>apt upgrade</code> is going to install a new version of Linux Kernel and Firmware, make sure that <code>/boot</code> has enough space.</li>
+</ol>
+<hr>
+<h3 class="mume-header" id="sever-migration">Sever Migration</h3>
+
+<p>If you are just migrating a server, then only two changes are necessary:</p>
+<ul>
+<li>
+<p><strong>Change FQDN or server IP</strong></p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">cd</span>
+<span class="token function">sudo</span> <span class="token function">vi</span> ~/decode_website/deployment_configs/nginx_decode
+</pre><p>Find two lines beginning with <code>server_name</code> and replace the FQDN / IP with the   correct one.</p>
+</li>
+<li>
+<p><strong>Change SSL certificate</strong><br>
+Both files should be <code>PEM</code> format.<br>
+Replace <code>~/decode_website/certs/cert.pem</code> with certificate (public key) file.<br>
+Replace <code>~/decode_website/certs/key.pem</code> with private key file.<br>
+To generate a self-signed SSL certificate, use</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">cd</span> ~/decode_website/certs
+openssl req -x509 -newkey rsa:4096 -sha256 -keyout key.pem -out cert.pem -days 3650  -nodes \
+-subj <span class="token string">&quot;/C=CN/ST=Guangdong/L=Shenzhen/O=Shenzhen Research Institute of Big Data/OU=Learning Analytics/CN=10.20.20.12&quot;</span>
+</pre><blockquote>
+<p>The common name of SSL cert must match <code>Nginx</code>&apos;s <code>server_name</code> configuration.</p>
+</blockquote>
+<p>After you&apos;ve done, run</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">sudo</span> systemctl restart nginx
+</pre></li>
+</ul>
+<p>The server should be available now.</p>
+<hr>
+<h3 class="mume-header" id="step-1-install-nginx-mysql-and-python">Step 1 - Install Nginx, MySQL and Python</h3>
+
+<p>First make sure you are in your home directory and then upgrade the package manager:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">cd</span>
+<span class="token function">sudo</span> <span class="token function">sed</span> -Ei <span class="token string">&apos;s/^# deb-src/deb-src/&apos;</span> /etc/apt/sources.list
+<span class="token function">sudo</span> apt update
+<span class="token function">sudo</span> apt upgrade
+</pre><blockquote>
+<p>The second command prepares <code>apt</code> to install Python later.</p>
+</blockquote>
+<p>Next, install Nginx and MySQL server:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">sudo</span> apt <span class="token function">install</span> nginx mysql-server libmysqlclient-dev
+</pre><blockquote>
+<p>You will be prompted to set root password for MySQL. Choose a long and strong password consisting of upper and lower case letters, digits, and underscores. Avoid using other special characters. Write down this password for later use.</p>
+</blockquote>
+<p>Verify that the installation succeeded:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell">systemctl status nginx mysql
+</pre><p>Two <span style="color:green">active (running) </span> in the output indicate success.</p>
+<p>Installing Python is more complicated since we have to build it from source code.<br>
+Fetch the newest source code, decompress it and <code>cd</code> into the new folder:</p>
+<blockquote>
+<p>Replace the URL, filename, and folder name with the latest version found on <a href="http://www.python.org">www.python.org</a></p>
+</blockquote>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">wget</span> https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tgz
+<span class="token function">tar</span> xvf Python-3.7.0.tgz
+<span class="token function">rm</span> Python-3.7.0.tgz
+<span class="token function">cd</span> Python-3.7.0
+</pre><p>Next, install necessary tools and libraries:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">sudo</span> apt <span class="token function">install</span> build-essential
+<span class="token function">sudo</span> <span class="token function">apt-get</span> build-dep python3.5
+</pre><blockquote>
+<p>As suggested by Python&apos;s <a href="https://devguide.python.org/setup/#unix">official dev guide</a>, since Ubuntu 16.04 LTS only contains Python up to version 3.5, we use <code>build-dep python3.5</code>. Also note that it is <code>apt-get</code>, not <code>apt</code> in the last command.</p>
+</blockquote>
+<p>Now make sure you are in the decompressed folder, build and install Python from source:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell">./configure --enable-optimizations
+<span class="token function">make</span>
+<span class="token function">sudo</span> <span class="token function">make</span> altinstall
+</pre><blockquote>
+<p>This takes a long time (because of optimizations). You can see many texts flashing in a short time and the screen may pause for a long break. You may even see Python exceptions - it&apos;s normal, don&apos;t do anything. If you accidentally interrupt a process (<code>Ctrl + C</code>), you have to repeat that one and its following commands.</p>
+</blockquote>
+<p>When the installation completes, you&apos;ll see <code>$</code> again. Now clean installation files and Step 1 is done.</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">cd</span>
+<span class="token function">sudo</span> <span class="token function">rm</span> -rf Python-3.7.0.tgz Python-3.7.0
+</pre><hr>
+<h3 class="mume-header" id="step-2-upload-and-create-environment">Step 2 - Upload and Create Environment</h3>
+
+<p>Assume that you have uploaded <code>decode_website.zip</code> to your home directory. (Probably with <code>scp</code> command)<br>
+Decompress the archive:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">cd</span>
+<span class="token function">sudo</span> apt <span class="token function">install</span> <span class="token function">zip</span> unzip
+unzip decode_website.zip
+<span class="token function">rm</span> decode_website.zip
+</pre><p>Create a Python virtual environment for the application:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">cd</span> ~/decode_website
+python3.7 -m venv decode_venv
+<span class="token function">source</span> ./decode_venv/bin/activate
+pip <span class="token function">install</span> -r requirements.txt
+</pre><p>Next, put configuration files in place:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">sudo</span> <span class="token function">ln</span> ~/decode_website/deployment_configs/gunicorn.service /etc/systemd/system/gunicorn.service
+<span class="token function">sudo</span> <span class="token function">ln</span> ~/decode_website/deployment_configs/gunicorn.socket /etc/systemd/system/gunicorn.socket
+<span class="token function">sudo</span> <span class="token function">ln</span> -s ~/decode_website/deployment_configs/nginx_decode /etc/nginx/sites-available/nginx_decode
+<span class="token function">sudo</span> <span class="token function">ln</span> -s ~/decode_website/deployment_configs/nginx_decode /etc/nginx/sites-enabled/nginx_decode
+<span class="token function">sudo</span> <span class="token function">rm</span> /etc/nginx/sites-enabled/default
+</pre><hr>
+<h3 class="mume-header" id="step-3-configuration">Step 3 - Configuration</h3>
+
+<ul>
+<li>
+<p><strong>Configure MySQL</strong><br>
+First, secure MySQL installation by running:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell">mysql_secure_installation
+</pre><p>You&apos;ll prompted for root password, which you should have already written down. Proceed with answers:</p>
+<pre data-role="codeBlock" data-info="" class="language-"><code>setup VALIDATE PASSWORD plugin: Y
+Please enter 0 = LOW, 1 = MEDIUM and 2 = STRONG: 2
+Change the password for root: N
+Remove anonymous users: Y
+Disallow root login remotely: Y
+Remove test database and access to it: Y
+Reload privilege tables now: Y
+</code></pre><p>Next, create database and user:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell">mysql -u root -p
+</pre><p>In MySQL prompt, enter:</p>
+<pre data-role="codeBlock" data-info="sql" class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">DATABASE</span> decode <span class="token keyword">CHARACTER</span> <span class="token keyword">SET</span> utf8mb4 <span class="token keyword">COLLATE</span> utf8mb4_unicode_ci<span class="token punctuation">;</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">USER</span> <span class="token string">&apos;decode&apos;</span>@&apos;localhost<span class="token string">&apos; IDENTIFIED BY &apos;</span><span class="token operator">-</span>v19hVITZ3ttCMqqe89H5G_S7yE4HaoLvf<span class="token operator">-</span>DceMMnFo<span class="token string">&apos;;
+GRANT ALL PRIVILEGES ON decode.* TO &apos;</span>decode<span class="token string">&apos;@&apos;</span>localhost&apos;<span class="token punctuation">;</span>
+FLUSH <span class="token keyword">PRIVILEGES</span><span class="token punctuation">;</span>
+\q
+</pre><blockquote>
+<p>You can choose a different password for user &apos;decode&apos;, but it should not contain special characters other than &apos;-&apos; or &apos;_&apos;. It needs to comply with strong password rule, too. You also need to change password in <code>~/decode_website/app_decode/config.py</code>.</p>
+</blockquote>
+</li>
+<li>
+<p><strong>Configure Nginx</strong><br>
+Edit Nginx config file:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">sudo</span> <span class="token function">vi</span> ~/decode_website/deployment_configs/nginx_decode
+</pre><ol>
+<li>Replace all <code>/home/itso</code> with your user&apos;s home folder, typically <code>/home/username</code>.</li>
+<li>Find two lines beginning with <code>server_name</code> and replace the FQDN / IP with the correct one.</li>
+</ol>
+<p>Save the file.<br>
+Then change SSL certificate:</p>
+<ol>
+<li>Replace <code>~/decode_website/certs/cert.pem</code> with certificate (public key) file.</li>
+<li>Replace <code>~/decode_website/certs/key.pem</code> with private key file.</li>
+</ol>
+<p>Both files should be <code>PEM</code> format.</p>
+</li>
+<li>
+<p><strong>Configure Gunicorn</strong><br>
+Edit Gunicorn service config file: (socket config file needs no change)</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">vi</span> ~/decode_website/deployment_configs/gunicorn.service
+</pre><p>Replace all <code>/home/itso</code> with your user&apos;s home folder, typically <code>/home/username</code>.<br>
+Create log files in advance to avoid permission issues:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">sudo</span> <span class="token function">touch</span> /var/log/gunicorn_access.log /var/log/gunicorn_error.log
+<span class="token function">sudo</span> <span class="token function">chown</span> www-data:root /var/log/gunicorn_access.log /var/log/gunicorn_error.log
+</pre></li>
+<li>
+<p><strong>Configure Application</strong><br>
+Implement the application&apos;s database table schema into MySQL and insert initial data:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">cd</span> ~/decode_website
+<span class="token function">source</span> ./decode_venv/bin/activate
+<span class="token function">export</span> FLASK_APP<span class="token operator">=</span>decode_website.py
+flask db init
+flask db migrate
+flask db upgrade
+flask initdb
+</pre></li>
+<li>
+<p><strong>View server logs</strong><br>
+For convenience, create symlink from logs to home folder:</p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">ln</span> -s /var/log/decode_access.log ~/nginx_access.log
+<span class="token function">ln</span> -s /var/log/decode_error.log ~/nginx_error.log
+<span class="token function">ln</span> -s /var/log/gunicorn_access.log ~/gunicorn_access.log
+<span class="token function">ln</span> -s /var/log/gunicorn_error.log ~/gunicorn_error.log
+</pre></li>
+<li>
+<p><strong>Restart services</strong></p>
+<pre data-role="codeBlock" data-info="shell" class="language-shell"><span class="token function">sudo</span> systemctl daemon-reload
+<span class="token function">sudo</span> systemctl <span class="token function">enable</span> gunicorn.socket
+<span class="token function">sudo</span> systemctl <span class="token function">enable</span> gunicorn.service
+<span class="token function">sudo</span> systemctl start gunicorn.socket
+<span class="token function">sudo</span> systemctl start gunicorn.service
+<span class="token function">sudo</span> systemctl restart nginx
+</pre></li>
+</ul>
+<p>The server should be available now.</p>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    </body></html>

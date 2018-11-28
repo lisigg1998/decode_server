@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="icon" href="static/images/flogo.png">
+	<title> Results - Decoding ID </title> 
+	<style type="text/css">
+
+body {
+	font: 100% Verdana, Arial, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+	color: #000;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+	margin-top: 0;   /* 删除上边距可以解决边距会超出其包含的块的问题。剩余的下边距可以使块与后面的任何元素保持一定距离。 */
+	padding-right: 15px;
+	padding-left: 15px; /* 向块内的元素侧边（而不是块元素自身）添加填充可避免使用任何方框模型数学。此外，也可将具有侧边填充的嵌套块用作替代方法。 */
+}
+
+/* ~~ 此固定宽度容器包含所有其它块 ~~ */
+.container {
+	width: 100%;
+	background-color: #FFFFFF;
+	margin: 0 auto; /* 侧边的自动值与宽度结合使用，可以将布局居中对齐 */
+}
+
+header {
+	background-color: #BEBEBE;
+	width:100%;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+}
+
+.sidebar1 {
+	float: left;
+	width: 20%;
+	background-color: #FFFFFF;
+	padding-bottom: 10px;
+}
+.content {
+	text-align: center;
+	padding: 10px 0;
+	width: 100%;
+	float: left;
+}
+
+/* 暂时没有用到  可以添加侧边导览 */
+aside {
+	float: left;
+	width: 25%;
+	background-color: #000000;
+	padding: 10px 0;
+}
+
+/* ~~ 脚注 ~~ */
+footer {
+	padding: 10px 0;
+	background-color: #FFFFFF;
+	position: relative;/* 这可以使 IE6 hasLayout 以正确方式进行清除 */
+	clear: both; /* 此清除属性强制 .container 了解列的结束位置以及包含列的位置 */
+	text-align: center;
+	font-size:11px;
+	background-color: transparent;
+	color:#BEBEBE;
+}
+
+
+/*HTML5 支持 - 将新 HTML5 标签设置为 display:block，以使浏览器知道如何正确呈现标签。 */
+header, section, footer, aside, article, figure {
+	display: block;
+}
+
+table {
+	font-family: Inconsolata, arial, sans-serif;
+	border-collapse: collapse;
+	width: 80%;
+	margin:auto;
+}
+
+td, th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+tr td:first-child {
+	width:30px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+}
+
+.second {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+}
+
+tr td:last-child {
+	width:80px;
+}
+
+
+tr:nth-child(even) {
+	background-color: #dddddd;
+}
+
+</style></head>
+
+<body>
+
+<div class="container">
+<header>
+	<img src="static/images/title4.png"  height="50" id="Insert_logo" style="background-color: #BEBEBE; display:block;"/>
+</header>
+
+<br></br>
+
+<table style="word-wrap:break-word; word-break:break-all;">
+	<tr>
+		<th>   </th>
+		<th class="second">Encoded ID</th>
+		<th class="second">Real ID</th>
+	</tr>
+	<div>
+{{ results|safe }}
+	</div>
+</table><br></br>
+
+<div style= "text-align: center">
+	<input type="button" value="Back" onclick= "window.history.back()">
+</div><br></br>
+
+<footer>
+	<p>Shenzhen Research Institute of Big Data</p>
+	<p>2001 Longxiang Road, Longgang District, Shenzhen, 518172</p>
+	<p>E-mail: benz@sribd.cn</p>
+</footer>
+
+</body>
+</html>

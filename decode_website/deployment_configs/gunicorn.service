@@ -1,0 +1,22 @@
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+PIDFile=/run/gunicorn/pid
+User=www-data
+Group=www-data
+RuntimeDirectory=gunicorn
+WorkingDirectory=/home/itso/decode_website
+Environment="PATH=/home/itso/decode_website/decode_venv/bin"
+ExecStart=/home/itso/decode_website/decode_venv/bin/gunicorn --pid /run/gunicorn/pid   \
+          --bind unix:/run/gunicorn/socket --access-logfile /var/log/gunicorn_access.log \
+		  --timeout 3600 \
+          --error-logfile /var/log/gunicorn_error.log app_decode:app_decode
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Decode Website Admin Portal</title>
+    <style>
+input[type=text], input[type=password], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 100px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+
+div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.collapsible:after {
+  content: '\002B';
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+    </style>
+  </head>
+  <body>
+    <h1>Choose one action to continue...</h1>
+    <hr>
+    <h2>Change API and admin passwords</h2>
+    <button class="collapsible">Details</button>
+    <div class="content">
+      <h3>Change API or Admin Portal passwords</h3>
+      <p>Usernames won't be changed.</p>
+      <p>All username-password combinations are stored in database and used in HTTP Basic Authentication.</p>
+      <p>Contact the users before changing passwords.</p>
+      <p><strong>Admin Portal</strong>: used to access Admin Portal pages.</p>
+      <p><strong>Token Issue API</strong>: used by <a href="https://i.cuhk.edu.cn">CUHK(SZ) Portal Cloud Platform</a></p>
+      <p><strong>Token Verify API</strong>: used by <a href="https://laweb.cuhk.edu.cn">Learning Analytics</a></p>
+    </div>
+    <form method="post" action="/admin/password">
+      <p>Select one to change its password:</p>
+      <select name="username">
+        <option value="{{ admin_portal_username }}">Admin Portal</option>
+        <option value="{{ issue_token_username }}">Token Issue API</option>
+        <option value="{{ verify_token_username }}">Token Verify API</option>
+      </select>
+      <p>Enter new password:</p>
+      <input type="password" name="pwd">
+      <p>Confirm new password:</p>
+      <input type="password" name="pwd_confirm">
+      <input type="submit" value="Change">
+    </form>
+    <hr>
+    <h2>Manage decode system users</h2>
+    <button class="collapsible">Details</button>
+    <div class="content">
+      <p>Add, modify or delete users who can access the ID decode page.</p>
+      <p>Delete action does not need password.</p>
+      <p>Refresh to see newly added usernames.</p>
+      <p>Please don't use these usernames: {{ not_usernames }}</p>
+      <p>They are used for Admin and API access.</p>
+      <p>All current usernames are listed here: </p>
+      {{ decode_users | safe }}
+    </div>
+    <form method="post" action="/admin/decode_user">
+      <p>Select an action:</p>
+      <select name="action">
+        <option value="update">Add or modify</option>
+        <option value="delete">Delete</option>
+      </select>
+      <p>Enter a username:</p>
+      <input type="text" name="username">
+      <p>Enter new password:</p>
+      <input type="password" name="pwd">
+      <p>Confirm new password:</p>
+      <input type="password" name="pwd_confirm">
+      <input type="submit" value="Modify">
+    </form>
+    <hr>
+    <h2>Add or update entries using a CSV file</h2>
+    <button class="collapsible">Details</button>
+    <div class="content">
+      <p>The CSV file should be comma separated and encoded in UTF-8.</p>
+      <p>The file should have no header row.</p>
+      <p>There should be two columns. Column 1 should contain real IDs and Column 2 should contain the corresponding encoded IDs.</p>
+      <p>If a real ID already exists, it will be updated with new encoded ID. Otherwise, a new entry will be created.</p>
+      <p>Here's a <a href="/static/sample.csv">sample CSV file</a>. Follow the format strictly, or potential problems may occur.</p>
+    </div>
+    <br>
+    <form method="post" action="/admin/uploadcsv" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".csv">
+      <br>
+      <input type="submit" value="Submit">
+    </form>
+    <hr>
+    <h2>Add or delete an entry from database</h2>
+    <button class="collapsible">Details</button>
+    <div class="content">
+      <p>An existing real ID will be updated with new encoded ID when adding new entry.</p>
+      <p>When deleting an entry, only real ID will be used to search the entry.</p>
+    </div>
+    <form method="post" action="/admin/entry">
+      <p>Choose an action:</p>
+      <select name="action">
+        <option value="update">Add new entry or modify existing entry</option>
+        <option value="delete">Delete existing entry</option>
+      </select>
+      <p>Enter a real ID:</p>
+      <input type="text" name="real_id">
+      <p>Enter the encoded ID:</p>
+      <input type="text" name="user_id">
+      <input type="submit" value="Submit">
+    </form>
+    <hr>
+    <h2>Clear database</h2>
+    <button class="collapsible">Details</button>
+    <div class="content">
+      <p style="color: red"><strong>Delete everything from the database, including both ID records and token records.</strong></p>
+      <p>Does not impact passwords.</p>
+      <p>This action will prompt for confirmation.</p>
+    </div>
+    <form method="post" action="/admin/clearall">
+      <input type="submit" style="background-color: #f44336;width: 120px" onclick="return confirm('Are you sure to clear everything in the database?')" value="DELETE ALL">
+    </form>
+  <script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.maxHeight){
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        } 
+      });
+    }
+  </script>
+  </body>
+</html>

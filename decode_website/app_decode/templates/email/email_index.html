@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Email Alert Admin Portal</title>
+    <style>
+input[type=text], input[type=password], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 100px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+
+div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.collapsible:after {
+  content: '\002B';
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+    </style>
+  </head>
+  <body>
+    <h1>Choose one action to continue...</h1>
+    <hr>
+    <h2>Change admin and API passwords</h2>
+    <button class="collapsible">Details</button>
+    <div class="content">
+      <p>Admin user can control email settings and passwords. </p>
+      <p>API user can send alert emails using the settings below.</p>
+    </div>
+    <form method="post" action="/email/password">
+      <p>Select one to change its password:</p>
+      <select name="username">
+        <option value="supervisor">Email admin</option>
+        <option value="laemail">Email API user</option>
+      </select>
+      <p>Enter new password:</p>
+      <input type="password" name="pwd">
+      <p>Confirm new password:</p>
+      <input type="password" name="pwd_confirm">
+      <input type="submit" value="Change">
+    </form>
+    <hr>
+    <h2>Modify email settings</h2>
+    <button class="collapsible">Details</button>
+    <div class="content">
+      <p>The pre-filled values are the current settings.</p>
+      <p>Don't modify if you want to keep them.</p>
+      <p>Click "Submit" to apply your changes, if any.</p>
+      <br>
+      <p>If <strong>test receiver address</strong> is set, then all emails will be sent to it instead of appropriate receivers.</p>
+      <p>This is for testing purpose only. Leave it empty for production use.</p>
+      <p><strong>Sender address</strong> is the "From" address of all emails sent by API user.</p>
+      <p><strong>Receiver address filter rule</strong> is a regular expression. Email API user can only send emails to email addresses that match this rule.</p>
+      <p>If set, a list of all receiver addresses will be sent to <strong>supervisor address</strong>. Keep it empty if you don't need this function.</p>
+    </div>
+    <form method="post" action="/email/settings">
+      <p>SMTP server</p>
+      <input type="text" name="smtp_host" value="{{ smtp_host }}">
+      <p>SMTP port</p>
+      <input type="text" name="smtp_port" value="{{ smtp_port }}">
+      <p>Use SSL</p>
+      <input type="radio" name="use_ssl" {{ use_ssl_true }} value="true">True<br>
+      <input type="radio" name="use_ssl" {{ use_ssl_false }} value="false">False<br>
+      <p>Sender address</p>
+      <input type="text" name="sender_address" value="{{ sender_address }}">
+      <p>Receiver address filter rule</p>
+      <input type="text" name="email_address_regex" value="{{ email_address_regex }}">
+      <p>Test receiver address (Optional)</p>
+      <input type="text" name="test_receiver" value="{{ test_receiver }}">
+      <p>Supervisor address (Optional)</p>
+      <input type="text" name="supervisor_address" value="{{ supervisor_address }}">
+      <input type="submit" value="Submit">
+    </form>
+  <script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.maxHeight){
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        } 
+      });
+    }
+  </script>
+  </body>
+</html>
